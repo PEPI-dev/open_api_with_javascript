@@ -8,26 +8,36 @@
 <body>
     <h2>서울특별시 최다 이용 정류장</h2>
     
+    <table id="busData" border="1">
+        <th>순위</th>
+        <th>승차</th>
+        <th>정류장명</th>
+        <td></td>
+        <td></td>
+        <td></td>
+    </table>
+
     <script>
         fetch('https://api.odcloud.kr/api/15074190/v1/uddi:2c52f81d-5dab-4c3d-a9da-b9c8c73f3be8?page=1&perPage=10&serviceKey=5kPPIiZ%2BRaq71LvyePsd31njzvAcjk2wUJpbZ047VDavGq5fxYX7MskwCtxFKgGTwjRMCM%2FrfxbK%2Fk7%2Bn5hvFw%3D%3D')
                 .then((response) => {
                     return response.json();
                 })
                 .then((datas) => {
-                    
                     const data = datas.data;
+
                     console.log(datas.data)
-                    document.write('<table border="1">')
+
+                    const busTable = document.getElementById("busData")
+
+                    datas.data.forEach((item) => {
+                        const parameter = document.createElement("td")
+                        parameter.textContent = `${item.순위} / ${item.승차} (${item.정류장명})`;
+                        busTable.appendChild(parameter);
+                    })
+
                     
 
-                    for(let i=0; i<data.length; i++){
-                       
-                        console.log(data[i].승차)
-                        
-                    }
-                    document.write("</table>")
-                    
-                });
+            });
 
     </script>
 </body>
