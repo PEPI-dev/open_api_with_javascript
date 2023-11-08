@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>서울특별시 최다 이용 정류장</title>
+</head>
+<body>
+    <h2>서울특별시 최다 이용 정류장</h2>
+    
+    <script>
+        fetch('https://api.odcloud.kr/api/15074190/v1/uddi:2c52f81d-5dab-4c3d-a9da-b9c8c73f3be8?page=1&perPage=10&serviceKey=5kPPIiZ%2BRaq71LvyePsd31njzvAcjk2wUJpbZ047VDavGq5fxYX7MskwCtxFKgGTwjRMCM%2FrfxbK%2Fk7%2Bn5hvFw%3D%3D')
+                .then((response) => {
+                    return response.json();
+                })
+                .then((datas) => {
+                    
+                    const data = datas.data;
+                    console.log(datas.data)
+                    document.write('<table border="1">')
+                    
+
+                    for(let i=0; i<data.length; i++){
+                       
+                        console.log(data[i].승차)
+                        
+                    }
+                    document.write("</table>")
+                    
+                });
+
+    </script>
+</body>
+</html>
