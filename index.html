@@ -3,42 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>서울특별시 최다 이용 정류장</title>
+    <title>서울특별시 대기오염 지수</title>
 </head>
 <body>
-    <h2>서울특별시 최다 이용 정류장</h2>
+    <h2>서울특별시 대기오염 지수</h2>
     
-    <table id="busData" border="1">
-        <th>순위</th>
-        <th>승차</th>
-        <th>정류장명</th>
-        <td></td>
-        <td></td>
-        <td></td>
+    <table id="air" border="1">
+        <th>측정지역</th>
+        <th>측정일</th>
+        <th>미세먼지 농도</th>
+        <th>초미세먼지 농도</th>
+        <th>오존 농도</th>
+        <th>대기질 점수</th>
+        <th>대기질 등급</th>
     </table>
 
     <script>
-        fetch('https://api.odcloud.kr/api/15074190/v1/uddi:2c52f81d-5dab-4c3d-a9da-b9c8c73f3be8?page=1&perPage=10&serviceKey=5kPPIiZ%2BRaq71LvyePsd31njzvAcjk2wUJpbZ047VDavGq5fxYX7MskwCtxFKgGTwjRMCM%2FrfxbK%2Fk7%2Bn5hvFw%3D%3D')
-                .then((response) => {
-                    return response.json();
-                })
-                .then((datas) => {
-                    const data = datas.data;
+        fetch('https://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?serviceKey=5kPPIiZ%2BRaq71LvyePsd31njzvAcjk2wUJpbZ047VDavGq5fxYX7MskwCtxFKgGTwjRMCM%2FrfxbK%2Fk7%2Bn5hvFw%3D%3D&returnType=json&numOfRows=100&pageNo=1&sidoName=%EC%84%9C%EC%9A%B8&ver=1.0')
+                .then((response) => response.json())
+                .then((data) => {
+                    const items = data.response.body.items;
 
-                    console.log(datas.data)
-
-                    const busTable = document.getElementById("busData")
-
-                    datas.data.forEach((item) => {
-                        const parameter = document.createElement("td")
-                        parameter.textContent = `${item.순위} / ${item.승차} (${item.정류장명})`;
-                        busTable.appendChild(parameter);
-                    })
+                    const airTable = document.getElementById("air");
 
                     
+                    let scoreMedals  = ['🥇','🥈','🥉']
 
-            });
+                    for (let i = 0; i < 40; i++) {
+                        const item = items[i];
+                        const row = airTable.insertRow();
+                        
+                        const cell1 = row.insertCell(0);
+                        const cell2 = row.insertCell(1);
+                        const cell3 = row.insertCell(2);
+                        const cell4 = row.insertCell(3);
+                        const cell5 = row.insertCell(4);
+                        const cell6 = row.insertCell(5);
+                        const cell7 = row.insertCell(6)
 
+                    
+                        cell1.textContent = item.stationName;
+                        cell2.textContent = item.dataTime;
+                        cell3.textContent = `${item.pm10Value}`;
+                        cell4.textContent = `${item.pm25Value}`;
+                        cell5.textContent = `${item.o3Value}`;
+                        cell6.textContent = `${item.khaiValue}`;
+                        //cell7.textContent = `${item.khaiGrade}`;
+
+
+                        const khaiGrade = parseInt(item.khaiGrade);
+
+                        if (khaiGrade >= 1 && khaiGrade <= 3) {
+                        cell7.innerHTML = scoreMedals[khaiGrade - 1];
+                        } else {
+                        cell7.textContent = `${item.khaiGrade}`;
+                        }
+
+                        if (khaiGrade == 1){
+                            cell7.innerHTML = scoreMedals[2]
+                        }else if(khaiGrade == 2){
+                            cell7.innerHTML = scoreMedals[1]
+                        }else{
+                            cell7.innerHTML = scoreMedals[0]
+                        }
+                    }
+                });
     </script>
 </body>
 </html>
